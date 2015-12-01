@@ -29,7 +29,7 @@ class FlickrAPIClient : NSObject {
         mutableParameters[ParameterKeys.apiKey] = Constants.ApiKey
         
         /* 2/3. Build the URL and configure the request */
-        let urlString = Constants.BaseURL + method + FlickrAPIClient.escapedParameters(mutableParameters)
+        let urlString = Constants.BaseURL + FlickrAPIClient.escapedParameters(mutableParameters)
         let url = NSURL(string: urlString)!
         let request = NSURLRequest(URL: url)
         

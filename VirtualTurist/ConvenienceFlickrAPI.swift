@@ -17,15 +17,15 @@ extension FlickrAPIClient {
     
     func getPhotosUsingLatAndLong(latitude: Double, longitude: Double, completionHandler: (result: [NSData]?, error: NSError?) -> Void) {
         
-        let computedBbox = BboxCalculator(latitude: latitude, longitude: longitude).computeCalculation()
+        //let computedBbox = BboxCalculator(latitude: latitude, longitude: longitude).computeCalculation()
         
         /* 1. Specify parameters, method (if has {key}), and HTTP body (if POST) */
-        let parameters = [ParameterKeys.apiKey:Constants.ApiKey,
-            ParameterKeys.method: Methods.search,
+        let parameters: [String: AnyObject] = [ParameterKeys.method: Methods.search,
             ParameterKeys.format: "json",
             ParameterKeys.nojsoncallback: "1",
             ParameterKeys.extras: "url_m",
-            ParameterKeys.bbox: computedBbox]
+            ParameterKeys.lat: latitude,
+            ParameterKeys.lon: longitude]
         
         /* 2. Make the request */
         taskForGETMethod(Methods.search, parameters: parameters) { JSONResult, error in
@@ -34,8 +34,16 @@ extension FlickrAPIClient {
             if let error = error {
                 completionHandler(result: nil, error: error)
             } else {
-                guard let photosFromRequest = JSONResult.objectForKey("photos") as? [String: AnyObject] else{
-                    print("Err with photos tag ")
+                
+                /* GUARD: Did Flickr return an error? */
+                guard let stat = JSONResult["stat"] as? String where stat == "ok" else {
+                    print("Flickr API returned an error. See error code and message in \(JSONResult)")
+                    return
+                }
+                
+                print("------------\(JSONResult)")
+                guard let photosFromRequest = JSONResult["photos"] as? NSDictionary else{
+                    print("XXX   Err with photos tag ")
                     return
                 }
                 
@@ -52,12 +60,13 @@ extension FlickrAPIClient {
                     
                     var results: [NSData] = [NSData]()
                     for photoInJSON in photos{
-                        guard let photoToBeShownUrl = NSURL(string: photoInJSON["url_m"] as! String) else{
-                            print("Err with getting photo url")
+                        guard let imageUrlString = photoInJSON["url_m"] as? String else {
+                            print("Cannot find key 'url_m' in \(photoInJSON)")
                             return
                         }
+                        let imageURL = NSURL(string: imageUrlString)
                         
-                        if let imageData = NSData(contentsOfURL: photoToBeShownUrl){
+                        if let imageData = NSData(contentsOfURL: imageURL!){
                             results.append(imageData)
                         }
                     }

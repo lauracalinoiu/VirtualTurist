@@ -32,5 +32,7 @@ extension FlickrAPIClient{
         static let nojsoncallback = "nojsoncallback"
         static let extras = "url_m"
         static let bbox = "bbox"
+        static let lat = "lat"
+        static let lon = "lon"
     }
 }
