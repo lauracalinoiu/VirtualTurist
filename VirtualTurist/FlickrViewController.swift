@@ -9,17 +9,41 @@
 import UIKit
 import MapKit
 
-class FlickrViewController: UIViewController {
+class FlickrViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var annotation: MKAnnotation!
     @IBOutlet weak var mapSnapshot: UIImageView!
     @IBOutlet weak var picCollection: UICollectionView!
     
-    let cellIdentifier = "flickrCell"
+    let cellIdentifier = "imgCell"
+    var snapshotter: MKMapSnapshotter!
+    
+    var imagesData: [NSData] = [NSData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let snapshotter = setupSnapshotter(annotation)
+        snapshotter = setupSnapshotter(annotation)
+        putSnapshotterToWork()
+        
+        picCollection.delegate = self
+        picCollection.dataSource = self
+        getImagesDataFromFlickr()
+    }
+    
+    func getImagesDataFromFlickr() -> Void {
+        FlickrAPIClient.sharedInstance().getPhotosUsingLatAndLong(annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { results, error in
+            if let imagesData = results {
+                self.imagesData = imagesData
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.picCollection.reloadData()
+                }
+            } else {
+                print(error)
+            }
+        }
+    }
+    
+    func putSnapshotterToWork(){
         snapshotter.startWithCompletionHandler({ (snapshot, err) -> Void in
             guard err == nil else {
                 print("\(err!.description)")
@@ -44,7 +68,6 @@ class FlickrViewController: UIViewController {
             
             self.mapSnapshot.image = compositeImage
         })
-        
     }
     
     func setupSnapshotter(annotation: MKAnnotation) -> MKMapSnapshotter{
@@ -53,6 +76,16 @@ class FlickrViewController: UIViewController {
         options.size =  mapSnapshot.bounds.size
         options.scale = UIScreen.mainScreen().scale
         return MKMapSnapshotter(options: options)
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
+        cell.imageView.image = UIImage(data: imagesData[indexPath.row])
+        return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return imagesData.count
     }
     
 }
