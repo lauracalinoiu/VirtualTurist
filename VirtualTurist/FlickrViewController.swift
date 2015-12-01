@@ -15,6 +15,8 @@ class FlickrViewController: UIViewController {
     @IBOutlet weak var mapSnapshot: UIImageView!
     @IBOutlet weak var picCollection: UICollectionView!
     
+    let cellIdentifier = "flickrCell"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let snapshotter = setupSnapshotter(annotation)
@@ -47,7 +49,7 @@ class FlickrViewController: UIViewController {
     
     func setupSnapshotter(annotation: MKAnnotation) -> MKMapSnapshotter{
         let options = MKMapSnapshotOptions()
-        options.region = MKCoordinateRegionMakeWithDistance(annotation.coordinate, 75000, 25000)
+        options.region = MKCoordinateRegionMakeWithDistance(annotation.coordinate, 80000, 20000)
         options.size =  mapSnapshot.bounds.size
         options.scale = UIScreen.mainScreen().scale
         return MKMapSnapshotter(options: options)
