@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vG4-hs-W2a">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="VirtualTurist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UeJ-6j-CFI"/>
+                        <viewControllerLayoutGuide type="bottom" id="4Jh-6l-a7v"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gKp-rD-GbZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="i2y-td-1CF">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="561"/>
+                            </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9WS-1t-tDr">
+                                <rect key="frame" x="0.0" y="561" width="600" height="39"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="39" id="dEx-OT-4JS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="i2y-td-1CF" firstAttribute="top" secondItem="gKp-rD-GbZ" secondAttribute="top" id="8XH-tv-AZM"/>
+                            <constraint firstItem="i2y-td-1CF" firstAttribute="leading" secondItem="9WS-1t-tDr" secondAttribute="leading" id="9ar-Fb-ReV"/>
+                            <constraint firstItem="4Jh-6l-a7v" firstAttribute="top" secondItem="9WS-1t-tDr" secondAttribute="bottom" id="Adr-NF-qIn"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9WS-1t-tDr" secondAttribute="trailing" constant="-20" id="GJ5-rh-bJg"/>
+                            <constraint firstItem="9WS-1t-tDr" firstAttribute="trailing" secondItem="i2y-td-1CF" secondAttribute="trailing" id="MAK-FM-S5z"/>
+                            <constraint firstItem="9WS-1t-tDr" firstAttribute="leading" secondItem="gKp-rD-GbZ" secondAttribute="leadingMargin" constant="-20" id="a8c-aA-1Pd"/>
+                            <constraint firstItem="9WS-1t-tDr" firstAttribute="top" secondItem="i2y-td-1CF" secondAttribute="bottom" id="kbk-yD-fvA"/>
+                            <constraint firstItem="9WS-1t-tDr" firstAttribute="top" secondItem="i2y-td-1CF" secondAttribute="bottom" id="o1I-J6-HT7"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Fc1-Ea-35X"/>
+                    <connections>
+                        <outlet property="mapView" destination="i2y-td-1CF" id="GwA-zR-QOz"/>
+                        <outlet property="messageLabel" destination="9WS-1t-tDr" id="QcM-WQ-daY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1023" y="-366"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="JEW-OG-jPM">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="vG4-hs-W2a" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4ay-id-N2X">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="zlm-g9-W3v"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="haC-LH-F2T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="323" y="-366"/>
+        </scene>
+    </scenes>
+</document>
