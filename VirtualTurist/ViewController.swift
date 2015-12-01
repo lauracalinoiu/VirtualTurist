@@ -74,10 +74,24 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    func setupSnapshotter() -> MKMapSnapshotter{
+        let options = MKMapSnapshotOptions()
+        options.region = mapView.region
+        options.size = mapView.frame.size
+        options.scale = UIScreen.mainScreen().scale
+        return MKMapSnapshotter()
+    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "clickOnPin" {
             let vc = segue.destinationViewController as! FlickrViewController
             vc.annotation = (sender as! MKAnnotationView).annotation
+            let snapshotter = setupSnapshotter()
+            snapshotter.startWithCompletionHandler({ (snapshot, err) -> Void in
+                guard err == nil else {
+                    return
+                }
+                vc.mapSnapshot.image = snapshot!.image
+            })
         }
     }
     

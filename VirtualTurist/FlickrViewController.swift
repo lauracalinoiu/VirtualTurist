@@ -12,11 +12,12 @@ import MapKit
 class FlickrViewController: UIViewController {
 
     var annotation: MKAnnotation!
+    @IBOutlet weak var mapSnapshot: UIImageView!
+    @IBOutlet weak var picCollection: UICollectionView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
 
