@@ -69,6 +69,15 @@ class ViewController: UIViewController, MKMapViewDelegate {
         if self.editing {
             let point = view.annotation
             mapView.removeAnnotation(point!)
+        } else {
+            performSegueWithIdentifier("clickOnPin", sender: view)
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "clickOnPin" {
+            let vc = segue.destinationViewController as! FlickrViewController
+            vc.annotation = (sender as! MKAnnotationView).annotation
         }
     }
     

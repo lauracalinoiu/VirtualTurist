@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D3092F041C0DA63F00470E41 /* FlickrViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3092F031C0DA63F00470E41 /* FlickrViewController.swift */; };
 		D313AFA81C0CAFCA00858EE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D313AFA71C0CAFCA00858EE3 /* AppDelegate.swift */; };
 		D313AFAA1C0CAFCA00858EE3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D313AFA91C0CAFCA00858EE3 /* ViewController.swift */; };
 		D313AFAD1C0CAFCA00858EE3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D313AFAB1C0CAFCA00858EE3 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D3092F031C0DA63F00470E41 /* FlickrViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrViewController.swift; sourceTree = "<group>"; };
 		D313AFA41C0CAFCA00858EE3 /* VirtualTurist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTurist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D313AFA71C0CAFCA00858EE3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D313AFA91C0CAFCA00858EE3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			children = (
 				D313AFA71C0CAFCA00858EE3 /* AppDelegate.swift */,
 				D313AFA91C0CAFCA00858EE3 /* ViewController.swift */,
+				D3092F031C0DA63F00470E41 /* FlickrViewController.swift */,
 				D313AFAB1C0CAFCA00858EE3 /* Main.storyboard */,
 				D313AFAE1C0CAFCA00858EE3 /* Assets.xcassets */,
 				D313AFB01C0CAFCA00858EE3 /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3092F041C0DA63F00470E41 /* FlickrViewController.swift in Sources */,
 				D313AFAA1C0CAFCA00858EE3 /* ViewController.swift in Sources */,
 				D313AFA81C0CAFCA00858EE3 /* AppDelegate.swift in Sources */,
 			);
@@ -287,6 +291,7 @@
 				D313AFB81C0CAFCA00858EE3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
