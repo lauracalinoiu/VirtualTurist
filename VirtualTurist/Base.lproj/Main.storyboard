@@ -43,7 +43,9 @@
                             <constraint firstItem="9WS-1t-tDr" firstAttribute="top" secondItem="i2y-td-1CF" secondAttribute="bottom" id="o1I-J6-HT7"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Fc1-Ea-35X"/>
+                    <navigationItem key="navigationItem" id="Fc1-Ea-35X">
+                        <barButtonItem key="backBarButtonItem" title="Save" id="Vpf-iT-4xA"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="i2y-td-1CF" id="GwA-zR-QOz"/>
                         <outlet property="messageLabel" destination="9WS-1t-tDr" id="QcM-WQ-daY"/>
