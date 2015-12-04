@@ -23,7 +23,19 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     var snapshotter: MKMapSnapshotter!
     
     var imagesData: [NSData] = [NSData]()
-    var selectedCells: [NSData] = [NSData]()
+    var selectedIndexes: [Int] = [Int](){
+        didSet{
+            picCollection.reloadData()
+            
+            if selectedIndexes.count == 0{
+                loadButton.hidden = false
+                removeButton.hidden = true
+            } else {
+                loadButton.hidden = true
+                removeButton.hidden = false
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,7 +119,12 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
         cell.imageView.image = UIImage(data: imagesData[indexPath.row])
-        cell.selected = false
+        
+        if selectedIndexes.contains(indexPath.row){
+            cell.imageView.alpha = 0.3
+        } else {
+            cell.imageView.alpha = 1
+        }
         return cell
     }
     
@@ -116,32 +133,25 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        loadButton.hidden = true
-        removeButton.hidden = false
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
-        cell.imageView.alpha = 0.3
+        if selectedIndexes.contains(indexPath.row){
+            selectedIndexes.removeAtIndex(selectedIndexes.indexOf(indexPath.row)!)
+        } else {
+            selectedIndexes.append(indexPath.row)
+        }
         
-        selectedCells.append(imagesData[indexPath.row])
+        print(selectedIndexes.count)
     }
-    
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
-        cell.imageView.alpha = 1
-        
-        let index = selectedCells.indexOf(imagesData[indexPath.row])
-        selectedCells.removeAtIndex(index!)
-    }
+  
     @IBAction func loadButtonHit(sender: UIButton) {
         getImagesDataFromFlickr()
     }
     
     @IBAction func removeButtonHit(sender: UIButton) {
-        for image in imagesData{
-            if selectedCells.contains(image){
-                imagesData.removeAtIndex(imagesData.indexOf(image)!)
-            }
+        selectedIndexes.sortInPlace(){$0>$1}
+        for index in selectedIndexes {
+            imagesData.removeAtIndex(index)
         }
-     
-        picCollection.reloadData()
+        
+        selectedIndexes = [Int]()
     }
 }
