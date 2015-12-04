@@ -27,11 +27,21 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         picCollection.delegate = self
         picCollection.dataSource = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         getImagesDataFromFlickr()
     }
     
     func getImagesDataFromFlickr() -> Void {
         FlickrAPIClient.sharedInstance().getPhotosUsingLatAndLong(annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { results, error in
+            
+            guard error == nil else {
+                print("\(error!.description)")
+                return
+            }
+            
             if let imagesData = results {
                 self.imagesData = imagesData
                 dispatch_async(dispatch_get_main_queue()) {

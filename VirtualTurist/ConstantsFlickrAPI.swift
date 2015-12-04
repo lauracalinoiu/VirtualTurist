@@ -30,9 +30,10 @@ extension FlickrAPIClient{
         static let method = "method"
         static let format = "format"
         static let nojsoncallback = "nojsoncallback"
-        static let extras = "url_m"
+        static let extras = "extras"
         static let bbox = "bbox"
         static let lat = "lat"
         static let lon = "lon"
+        static let in_gallery = "in_gallery"
     }
 }
