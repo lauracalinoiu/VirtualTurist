@@ -66,8 +66,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <userGuides>
-                            <userLayoutGuide location="300" affinity="minX"/>
-                            <userLayoutGuide location="575" affinity="minY"/>
+                            <userLayoutGuide location="299" affinity="minX"/>
+                            <userLayoutGuide location="569" affinity="minY"/>
                         </userGuides>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EnW-Gh-oTB">
@@ -76,17 +76,6 @@
                                     <constraint firstAttribute="height" constant="129" id="gtx-di-uh8"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FYn-dp-j4K">
-                                <rect key="frame" x="0.0" y="561" width="600" height="39"/>
-                                <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="39" id="ziD-9B-3Nn"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                <state key="normal" title="Load new collection">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="M55-Ey-jfG">
                                 <rect key="frame" x="0.0" y="193" width="600" height="365"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -123,22 +112,66 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMf-gh-7MN">
+                                <rect key="frame" x="0.0" y="561" width="600" height="39"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="O7p-IA-5lr">
+                                        <rect key="frame" x="282" y="1" width="37" height="37"/>
+                                    </activityIndicatorView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FYn-dp-j4K">
+                                <rect key="frame" x="0.0" y="561" width="600" height="39"/>
+                                <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="39" id="ziD-9B-3Nn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <state key="normal" title="Load new collection">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadButtonHit:" destination="ebe-mx-U0O" eventType="touchUpInside" id="J2f-Im-oJq"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q4Z-aH-zdV">
+                                <rect key="frame" x="0.0" y="561" width="600" height="39"/>
+                                <color key="backgroundColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="39" id="xX9-qJ-uig"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <state key="normal" title="Remove from Collection">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="removeButtonHit:" destination="ebe-mx-U0O" eventType="touchUpInside" id="Juu-MH-LQp"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="leading" secondItem="M55-Ey-jfG" secondAttribute="leading" id="2OJ-RB-jDt"/>
                             <constraint firstItem="EnW-Gh-oTB" firstAttribute="leading" secondItem="wxP-9x-KPR" secondAttribute="leadingMargin" constant="-20" id="3Ds-ON-Xgp"/>
+                            <constraint firstItem="Q4Z-aH-zdV" firstAttribute="trailing" secondItem="FYn-dp-j4K" secondAttribute="trailing" id="43h-qG-0gl"/>
+                            <constraint firstItem="YMf-gh-7MN" firstAttribute="top" secondItem="Q4Z-aH-zdV" secondAttribute="top" id="6aZ-3S-snz"/>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="leading" secondItem="EnW-Gh-oTB" secondAttribute="leading" id="H7F-vp-J0w"/>
+                            <constraint firstItem="Q4Z-aH-zdV" firstAttribute="baseline" secondItem="FYn-dp-j4K" secondAttribute="baseline" id="HLw-eU-hwL"/>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="trailing" secondItem="EnW-Gh-oTB" secondAttribute="trailing" id="IAL-Ax-3OL"/>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="bottom" secondItem="FyU-6h-OgD" secondAttribute="top" id="IAQ-hI-F2c"/>
                             <constraint firstItem="M55-Ey-jfG" firstAttribute="top" secondItem="xPS-lb-3QT" secondAttribute="bottom" constant="129" id="Jb9-y8-gPF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EnW-Gh-oTB" secondAttribute="trailing" constant="-20" id="Jn5-Ve-EMi"/>
                             <constraint firstItem="M55-Ey-jfG" firstAttribute="leading" secondItem="wxP-9x-KPR" secondAttribute="leadingMargin" constant="-20" id="Pks-CZ-6pg"/>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="trailing" secondItem="M55-Ey-jfG" secondAttribute="trailing" id="Ujw-y7-dkb"/>
+                            <constraint firstItem="YMf-gh-7MN" firstAttribute="leading" secondItem="Q4Z-aH-zdV" secondAttribute="leading" id="WYK-Nj-6sw"/>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="top" secondItem="M55-Ey-jfG" secondAttribute="bottom" constant="3" id="X2w-O5-zDx"/>
                             <constraint firstAttribute="trailingMargin" secondItem="M55-Ey-jfG" secondAttribute="trailing" constant="-20" id="dMS-WY-4SM"/>
+                            <constraint firstItem="Q4Z-aH-zdV" firstAttribute="leading" secondItem="FYn-dp-j4K" secondAttribute="leading" id="eCT-sM-woo"/>
                             <constraint firstItem="M55-Ey-jfG" firstAttribute="top" secondItem="EnW-Gh-oTB" secondAttribute="bottom" id="lyb-WJ-yVP"/>
                             <constraint firstItem="EnW-Gh-oTB" firstAttribute="top" secondItem="xPS-lb-3QT" secondAttribute="bottom" id="vaS-nL-oEX"/>
+                            <constraint firstItem="YMf-gh-7MN" firstAttribute="bottom" secondItem="FyU-6h-OgD" secondAttribute="top" id="wlH-8U-JbV"/>
+                            <constraint firstItem="YMf-gh-7MN" firstAttribute="trailing" secondItem="Q4Z-aH-zdV" secondAttribute="trailing" id="wyg-KM-O7h"/>
                             <constraint firstItem="FYn-dp-j4K" firstAttribute="top" secondItem="M55-Ey-jfG" secondAttribute="bottom" constant="3" id="x90-X5-XzW"/>
                         </constraints>
                         <variation key="default">
@@ -151,8 +184,11 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="O7p-IA-5lr" id="F1Q-SF-4yF"/>
+                        <outlet property="loadButton" destination="FYn-dp-j4K" id="Eau-at-Xpn"/>
                         <outlet property="mapSnapshot" destination="EnW-Gh-oTB" id="ZtS-bL-ltu"/>
                         <outlet property="picCollection" destination="M55-Ey-jfG" id="gM6-yN-5st"/>
+                        <outlet property="removeButton" destination="Q4Z-aH-zdV" id="wzI-CN-Xsq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6fh-y9-D4e" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -15,10 +15,15 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     @IBOutlet weak var mapSnapshot: UIImageView!
     @IBOutlet weak var picCollection: UICollectionView!
     
+    @IBOutlet weak var removeButton: UIButton!
+    @IBOutlet weak var loadButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     let cellIdentifier = "imgCell"
     var snapshotter: MKMapSnapshotter!
     
     var imagesData: [NSData] = [NSData]()
+    var selectedCells: [NSData] = [NSData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +32,10 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         picCollection.delegate = self
         picCollection.dataSource = self
+        picCollection.allowsMultipleSelection = true
+        
+        loadButton.hidden = false
+        removeButton.hidden = true
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -35,6 +44,10 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func getImagesDataFromFlickr() -> Void {
+        activityIndicator.hidden = false
+        activityIndicator.startAnimating()
+        loadButton.hidden = true
+        
         FlickrAPIClient.sharedInstance().getPhotosUsingLatAndLong(annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { results, error in
             
             guard error == nil else {
@@ -46,6 +59,9 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
                 self.imagesData = imagesData
                 dispatch_async(dispatch_get_main_queue()) {
                     self.picCollection.reloadData()
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.hidden = true
+                    self.loadButton.hidden = false
                 }
             } else {
                 print(error)
@@ -91,6 +107,7 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
         cell.imageView.image = UIImage(data: imagesData[indexPath.row])
+        cell.selected = false
         return cell
     }
     
@@ -98,4 +115,33 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
         return imagesData.count
     }
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        loadButton.hidden = true
+        removeButton.hidden = false
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
+        cell.imageView.alpha = 0.3
+        
+        selectedCells.append(imagesData[indexPath.row])
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
+        cell.imageView.alpha = 1
+        
+        let index = selectedCells.indexOf(imagesData[indexPath.row])
+        selectedCells.removeAtIndex(index!)
+    }
+    @IBAction func loadButtonHit(sender: UIButton) {
+        getImagesDataFromFlickr()
+    }
+    
+    @IBAction func removeButtonHit(sender: UIButton) {
+        for image in imagesData{
+            if selectedCells.contains(image){
+                imagesData.removeAtIndex(imagesData.indexOf(image)!)
+            }
+        }
+     
+        picCollection.reloadData()
+    }
 }
