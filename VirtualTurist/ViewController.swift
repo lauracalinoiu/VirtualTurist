@@ -8,14 +8,22 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class ViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var messageLabel: UILabel!
     
+    var pins: [Pin] = [Pin]()
+    
     let deletePinsMessage = "Tap on pins to delete them"
     let addPinsMessage = "Long press for adding new pin"
+    
+    
+    lazy var sharedContext: NSManagedObjectContext  = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +33,41 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: "addPins:")
         longPressGesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressGesture)
-        
+     
+        pins = fetchAllPins()
         setUpAddPinsMessage()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        for pin in pins{
+            addAnnotationForLocation(pin)
+        }
+    }
+    
+    func fetchAllPins() -> [Pin]{
+        let fetchRequest = NSFetchRequest()
+        let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: sharedContext)
+        
+        fetchRequest.entity = entity
+        
+        var results: [AnyObject]!
+        do{
+            results = try sharedContext.executeFetchRequest(fetchRequest)
+        } catch {
+            results = nil
+            print("\(error)")
+        }
+        return results as! [Pin]
+    }
+    
+    func addAnnotationForLocation(pin: Pin){
+        let annot = MKPointAnnotation()
+        annot.coordinate = CLLocationCoordinate2D(latitude: pin.lat, longitude: pin.lon)
+        mapView.addAnnotation(annot)
+    }
+    
     
     func setUpAddPinsMessage(){
         messageLabel.text = addPinsMessage
@@ -62,6 +102,14 @@ class ViewController: UIViewController, MKMapViewDelegate {
             annot.coordinate = coordinate
             
             mapView.addAnnotation(annot)
+            
+            Pin(dictionary: [Pin.Keys.lat: annot.coordinate.latitude,
+                Pin.Keys.lon: annot.coordinate.longitude], context: sharedContext)
+            do{
+                try sharedContext.save()
+            } catch {
+                print("err in save \(error)")
+            }
         }
     }
     
@@ -74,7 +122,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-   
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "clickOnPin" {
             let vc = segue.destinationViewController as! FlickrViewController
