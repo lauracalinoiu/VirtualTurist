@@ -136,7 +136,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "clickOnPin" {
             let vc = segue.destinationViewController as! FlickrViewController
-            vc.annotation = (sender as! MKAnnotationView).annotation
+            let annotationView = (sender as! MKAnnotationView).annotation
+            let pin = contextPins.filter{$0.lat == annotationView?.coordinate.latitude && $0.lon == annotationView?.coordinate.longitude}.first
+            vc.pin = pin
+
         }
     }
     

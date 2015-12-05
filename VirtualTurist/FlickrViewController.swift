@@ -11,7 +11,7 @@ import MapKit
 
 class FlickrViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    var annotation: MKAnnotation!
+    var pin: Pin!
     @IBOutlet weak var mapSnapshot: UIImageView!
     @IBOutlet weak var picCollection: UICollectionView!
     
@@ -39,7 +39,7 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        snapshotter = setupSnapshotter(annotation)
+        snapshotter = setupSnapshotter()
         putSnapshotterToWork()
         
         picCollection.delegate = self
@@ -60,7 +60,7 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
         activityIndicator.startAnimating()
         loadButton.hidden = true
         
-        FlickrAPIClient.sharedInstance().getPhotosUsingLatAndLong(annotation.coordinate.latitude, longitude: annotation.coordinate.longitude) { results, error in
+        FlickrAPIClient.sharedInstance().getPhotosUsingLatAndLong(pin.lat, longitude: pin.lon) { results, error in
             
             guard error == nil else {
                 print("\(error!.description)")
@@ -95,7 +95,7 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
             
             let visibleRect = CGRect(origin: CGPoint.zero, size: image.size)
             
-            var point = snapshot!.pointForCoordinate(self.annotation.coordinate)
+            var point = snapshot!.pointForCoordinate(CLLocationCoordinate2D(latitude: self.pin.lat, longitude: self.pin.lon))
             if visibleRect.contains(point) {
                 point.x = point.x + pin.centerOffset.x - (pin.bounds.size.width / 2)
                 point.y = point.y + pin.centerOffset.y - (pin.bounds.size.height / 2)
@@ -108,9 +108,9 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
         })
     }
     
-    func setupSnapshotter(annotation: MKAnnotation) -> MKMapSnapshotter{
+    func setupSnapshotter() -> MKMapSnapshotter{
         let options = MKMapSnapshotOptions()
-        options.region = MKCoordinateRegionMakeWithDistance(annotation.coordinate, 80000, 20000)
+        options.region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2D(latitude: pin.lat, longitude: pin.lon), 80000, 20000)
         options.size =  mapSnapshot.bounds.size
         options.scale = UIScreen.mainScreen().scale
         return MKMapSnapshotter(options: options)
