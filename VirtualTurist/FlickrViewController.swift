@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class FlickrViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
@@ -22,7 +23,10 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     let cellIdentifier = "imgCell"
     var snapshotter: MKMapSnapshotter!
     
-    var imagesData: [NSData] = [NSData]()
+    lazy var sharedContext: NSManagedObjectContext  = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
+    
     var selectedIndexes: [Int] = [Int](){
         didSet{
             picCollection.reloadData()
@@ -52,7 +56,6 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        getImagesDataFromFlickr()
     }
     
     func getImagesDataFromFlickr() -> Void {
@@ -67,8 +70,14 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
                 return
             }
             
-            if let imagesData = results {
-                self.imagesData = imagesData
+            if let imagesUrls = results {
+                
+                for imageUrl in imagesUrls{
+                    let pic = Pic(dictionary: [Pic.Keys.url: imageUrl], context: self.sharedContext)
+                    pic.pin = self.pin
+                }
+                
+                self.saveContext()
                 dispatch_async(dispatch_get_main_queue()) {
                     self.picCollection.reloadData()
                     self.activityIndicator.stopAnimating()
@@ -118,7 +127,13 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! ImgCell
-        cell.imageView.image = UIImage(data: imagesData[indexPath.row])
+        
+        let pictures = pin.pics
+        let pic = pictures.allObjects[indexPath.row] as! Pic
+        let imageURL = NSURL(string: pic.url)
+        if let imageData = NSData(contentsOfURL: imageURL!){
+            cell.imageView.image = UIImage(data: imageData)
+        }
         
         if selectedIndexes.contains(indexPath.row){
             cell.imageView.alpha = 0.3
@@ -129,7 +144,7 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesData.count
+        return pin.pics.count
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -149,9 +164,17 @@ class FlickrViewController: UIViewController, UICollectionViewDataSource, UIColl
     @IBAction func removeButtonHit(sender: UIButton) {
         selectedIndexes.sortInPlace(){$0>$1}
         for index in selectedIndexes {
-            imagesData.removeAtIndex(index)
+            let pic = pin.pics.allObjects[index] as! Pic
+            sharedContext.deleteObject(pic)
         }
-        
+        saveContext()
         selectedIndexes = [Int]()
+    }
+    func saveContext(){
+        do{
+            try sharedContext.save()
+        } catch {
+            print("err in save \(error)")
+        }
     }
 }

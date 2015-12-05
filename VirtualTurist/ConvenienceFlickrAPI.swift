@@ -14,7 +14,7 @@ import Foundation
 extension FlickrAPIClient {
 
     
-    func getPhotosUsingLatAndLong(latitude: Double, longitude: Double, completionHandler: (result: [NSData]?, error: NSError?) -> Void) {
+    func getPhotosUsingLatAndLong(latitude: Double, longitude: Double, completionHandler: (result: [String]?, error: NSError?) -> Void) {
         
         let MAX_NO_OF_PHOTOS = 10
         /* 1. Specify parameters, method (if has {key}), and HTTP body (if POST) */
@@ -58,7 +58,7 @@ extension FlickrAPIClient {
                         return
                     }
                     
-                    var results: [NSData] = [NSData]()
+                    var results: [String] = [String]()
                     let startIndex = Int(arc4random_uniform(UInt32(photos.count / MAX_NO_OF_PHOTOS))) * MAX_NO_OF_PHOTOS
                     var index = startIndex
 
@@ -68,11 +68,8 @@ extension FlickrAPIClient {
                             print("Cannot find key 'url_m' in \(photoInJSON)")
                             return
                         }
-                        let imageURL = NSURL(string: imageUrlString)
-                        
-                        if let imageData = NSData(contentsOfURL: imageURL!){
-                            results.append(imageData)
-                        }
+                       
+                        results.append(imageUrlString)
                         index++
                     } while (index - startIndex) < MAX_NO_OF_PHOTOS && index < photos.count
                     completionHandler(result: results, error: nil)

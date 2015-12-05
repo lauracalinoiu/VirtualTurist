@@ -2,15 +2,15 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15B42" minimumToolsVersion="Xcode 7.0">
     <entity name="Pic" representedClassName=".Pic" syncable="YES">
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="pin" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="pics" inverseEntity="Pin" syncable="YES"/>
+        <relationship name="pin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="pics" inverseEntity="Pin" syncable="YES"/>
     </entity>
     <entity name="Pin" representedClassName=".Pin" syncable="YES">
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="pics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pic" inverseName="pin" inverseEntity="Pic" syncable="YES"/>
+        <relationship name="pics" toMany="YES" deletionRule="Nullify" destinationEntity="Pic" inverseName="pin" inverseEntity="Pic" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Pin" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="Pic" positionX="-54" positionY="-9" width="128" height="75"/>
+        <element name="Pin" positionX="-63" positionY="-18" width="128" height="90"/>
     </elements>
 </model>
