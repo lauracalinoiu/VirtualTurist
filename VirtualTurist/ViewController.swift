@@ -15,12 +15,10 @@ class ViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var messageLabel: UILabel!
     
-    var pins: [Pin] = [Pin]()
-    
     let deletePinsMessage = "Tap on pins to delete them"
     let addPinsMessage = "Long press for adding new pin"
     
-    
+    var contextPins: [Pin]!
     lazy var sharedContext: NSManagedObjectContext  = {
         return CoreDataStackManager.sharedInstance().managedObjectContext
     }()
@@ -34,14 +32,14 @@ class ViewController: UIViewController, MKMapViewDelegate {
         longPressGesture.minimumPressDuration = 1.0
         mapView.addGestureRecognizer(longPressGesture)
      
-        pins = fetchAllPins()
+        contextPins = fetchAllPins()
         setUpAddPinsMessage()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        for pin in pins{
+        for pin in contextPins{
             addAnnotationForLocation(pin)
         }
     }
@@ -103,13 +101,17 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
             mapView.addAnnotation(annot)
             
-            Pin(dictionary: [Pin.Keys.lat: annot.coordinate.latitude,
-                Pin.Keys.lon: annot.coordinate.longitude], context: sharedContext)
-            do{
-                try sharedContext.save()
-            } catch {
-                print("err in save \(error)")
-            }
+            contextPins.append(Pin(dictionary: [Pin.Keys.lat: annot.coordinate.latitude,
+                Pin.Keys.lon: annot.coordinate.longitude], context: sharedContext))
+            saveContext()
+        }
+    }
+    
+    func saveContext(){
+        do{
+            try sharedContext.save()
+        } catch {
+            print("err in save \(error)")
         }
     }
     
@@ -117,10 +119,19 @@ class ViewController: UIViewController, MKMapViewDelegate {
         if self.editing {
             let point = view.annotation
             mapView.removeAnnotation(point!)
+            
+            let pin = contextPins.filter{$0.lat == point?.coordinate.latitude && $0.lon == point?.coordinate.longitude}.first
+            if let unwrappedPin = pin {
+                contextPins.removeAtIndex(contextPins.indexOf(unwrappedPin)!)
+                sharedContext.deleteObject(unwrappedPin)
+            }
+            saveContext()
+            
         } else {
             performSegueWithIdentifier("clickOnPin", sender: view)
         }
     }
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "clickOnPin" {
